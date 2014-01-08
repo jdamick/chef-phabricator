@@ -26,10 +26,7 @@ default['phabricator']['config'] = {
     # mysql connection params
     'mysql.host' => 'localhost',
     'mysql.port' => 3306,
-    'mysql.user' => value_for_platform_family(
-        'pld' => 'mysql',
-        'default' => 'root',
-    ),
+    'mysql.user' => 'root',
     'mysql.pass' => '',
 }
 
