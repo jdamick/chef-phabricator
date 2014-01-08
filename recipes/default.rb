@@ -66,31 +66,29 @@ bash "Upgrade Phabricator storage" do
     notifies :create, "template[Create admin script]", :immediately
 end
 
-if node['phabricator']['create_admin']
+# Install custom script to easily install an admin user
+template "Create admin script" do
+    path "#{phabricator_dir}/scripts/user/admin.php"
+    source "account.erb"
+    user install_user
+    mode 0755
+    action :nothing
+    notifies :run, "bash[Install admin account]", :immediately
+    only_if { node['phabricator']['create_admin'] }
+end
 
-  # Install custom script to easily install an admin user
-  template "Create admin script" do
-      path "#{phabricator_dir}/scripts/user/admin.php"
-      source "account.erb"
-      user install_user
-      mode 0755
-      action :nothing
-      notifies :run, "bash[Install admin account]", :immediately
-  end
+bash "Install admin account" do
+    user install_user
+    cwd "#{phabricator_dir}/scripts/user"
+    code "./admin.php"
+    action :nothing
+    notifies :delete, "file[Remove admin script]", :immediately
+    only_if { node['phabricator']['create_admin'] }
+end
 
-  bash "Install admin account" do
-      user install_user
-      cwd "#{phabricator_dir}/scripts/user"
-      code "./admin.php"
-      action :nothing
-      notifies :delete, "file[Remove admin script]", :immediately
-  end
-
-  file "Remove admin script" do
-      path "#{phabricator_dir}/scripts/user/admin.php"
-      action :nothing
-  end
-
+file "Remove admin script" do
+    path "#{phabricator_dir}/scripts/user/admin.php"
+    action :nothing
 end
 
 # just to be sure dirs exist
