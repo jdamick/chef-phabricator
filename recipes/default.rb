@@ -2,7 +2,7 @@
 ## Cookbook Name:: phabricator
 ## Recipe:: default
 ##
-## Copyright 2013, Siphoc
+## Copyright 2013, Siphoc 
 ##
 ## Permission is hereby granted, free of charge, to any person obtaining a copy
 ## of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,9 @@
 ## OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ## THE SOFTWARE.
 ##
+
+
+include_recipe "nginx"
 
 # Install optional packages
 node['phabricator']['packages'].each do |pkg|
@@ -63,27 +66,31 @@ bash "Upgrade Phabricator storage" do
     notifies :create, "template[Create admin script]", :immediately
 end
 
-# Install custom script to easily install an admin user
-template "Create admin script" do
-    path "#{phabricator_dir}/scripts/user/admin.php"
-    source "account.erb"
-    user install_user
-    mode 0755
-    action :nothing
-    notifies :run, "bash[Install admin account]", :immediately
-end
+if node['phabricator']['create_admin']
 
-bash "Install admin account" do
-    user install_user
-    cwd "#{phabricator_dir}/scripts/user"
-    code "./admin.php"
-    action :nothing
-    notifies :delete, "file[Remove admin script]", :immediately
-end
+  # Install custom script to easily install an admin user
+  template "Create admin script" do
+      path "#{phabricator_dir}/scripts/user/admin.php"
+      source "account.erb"
+      user install_user
+      mode 0755
+      action :nothing
+      notifies :run, "bash[Install admin account]", :immediately
+  end
 
-file "Remove admin script" do
-    path "#{phabricator_dir}/scripts/user/admin.php"
-    action :nothing
+  bash "Install admin account" do
+      user install_user
+      cwd "#{phabricator_dir}/scripts/user"
+      code "./admin.php"
+      action :nothing
+      notifies :delete, "file[Remove admin script]", :immediately
+  end
+
+  file "Remove admin script" do
+      path "#{phabricator_dir}/scripts/user/admin.php"
+      action :nothing
+  end
+
 end
 
 # just to be sure dirs exist

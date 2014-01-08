@@ -1,6 +1,8 @@
 server {
+  <% unless node['phabricator']['domain'].empty? %>
   server_name <%= node['phabricator']['domain'] %>;
-
+  <% end %>
+  
   root <%= @phabricator_dir %>/webroot;
   try_files $uri $uri/ /index.php;
 

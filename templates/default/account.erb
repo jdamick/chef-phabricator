@@ -10,8 +10,8 @@ $user->setUsername($username);
 $user->setRealName($username);
 $is_new = true;
 
-$email = $create_email = '<%= node['phabricator']['email'] %>';
-$changed_pass = $password = '<%= node['phabricator']['password'] %>';
+$email = $create_email = '<%= node['phabricator']['admin_email'] %>';
+$changed_pass = $password = '<%= node['phabricator']['admin_password'] %>';
 
 $is_system_agent = $user->getIsSystemAgent();
 $set_system_agent = true;

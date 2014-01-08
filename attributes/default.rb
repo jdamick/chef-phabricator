@@ -1,13 +1,17 @@
-default['phabricator']['username'] = 'admin'
-default['phabricator']['email'] = 'jelmer@siphoc.com'
-default['phabricator']['password'] = 'root'
+# admin account
+###############
+default['phabricator']['create_admin'] = true
+default['phabricator']['admin_username'] = 'admin'
+default['phabricator']['admin_email'] = 'phabricator@localhost'
+default['phabricator']['admin_password'] = 'letmein'
 
+# nginx server_name
 default['phabricator']['domain'] = 'phabricator.dev'
 
 # user to own the checked out files
-default['phabricator']['user'] = 'vagrant'
+default['phabricator']['user'] = 'root'
 # dir where phabricator and deps are installed
-default['phabricator']['install_dir'] = '/home/vagrant'
+default['phabricator']['install_dir'] = '/opt'
 
 # ngix service name, maybe different on platforms
 default['phabricator']['nginx']['service'] = 'nginx'
@@ -34,6 +38,8 @@ default['phabricator']['config'] = {
 case node['platform_family']
 when 'pld'
   default['phabricator']['packages'] = %w{git-core php-program php-spl php-mysql php-json php-filter php-hash php-openssl php-mbstring php-iconv php-curl php-fileinfo php-pecl-APC php-gd}
+elsif 'debian'
+  default['phabricator']['packages'] = %w{git dpkg-dev php5 php5-mysql php5-gd php5-dev php5-curl php-apc php5-cli php5-json}
 else
   default['phabricator']['packages'] = %w{}
 end
