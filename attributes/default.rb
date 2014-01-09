@@ -36,7 +36,7 @@ case node['platform_family']
 when 'pld'
   default['phabricator']['packages'] = %w{git-core php-program php-spl php-mysql php-json php-filter php-hash php-openssl php-mbstring php-iconv php-curl php-fileinfo php-pecl-APC php-gd}
 when 'debian'
-  default['phabricator']['packages'] = %w{git dpkg-dev php5 php5-mysql php5-gd php5-dev php5-curl php-apc php5-cli php5-json}
+  default['phabricator']['packages'] = %w{git dpkg-dev php5 php5-mysql php5-gd php5-dev php5-curl php-apc php5-cli php5-json php5-fpm }
 else
   default['phabricator']['packages'] = %w{}
 end
