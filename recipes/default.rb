@@ -121,3 +121,8 @@ file "Remove default nginx site" do
   notifies :reload, "service[nginx]"
 end
 
+# restart
+service "php5-fpm" do
+    service_name 'php5-fpm'
+    action [:restart]
+end
