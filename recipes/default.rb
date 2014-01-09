@@ -114,3 +114,10 @@ link "Enable Phabricator for nginx" do
     target_file "/etc/nginx/sites-enabled/phabricator"
     notifies :reload, "service[nginx]"
 end
+
+file "Remove default nginx site" do
+  path "/etc/nginx/sites-enabled/default"
+  action :delete
+  notifies :reload, "service[nginx]"
+end
+
