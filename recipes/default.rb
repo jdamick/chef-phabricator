@@ -121,6 +121,16 @@ file "Remove default nginx site" do
   notifies :reload, "service[nginx]"
 end
 
+link "/etc/init.d/phd" do
+  to "#{phabricator_dir}/bin/phd"
+  action :create
+end
+
+service "phd" do
+  supports :status => true, :restart => true, :start => true, :stop => true
+  action [ :enable, :start ]
+end
+
 # restart
 service "php5-fpm" do
     service_name 'php5-fpm'
